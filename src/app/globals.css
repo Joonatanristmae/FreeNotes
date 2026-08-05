@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #f3f4f1;
+  --sand: #e8ebe4;
+  --sand-dark: #dde2d8;
+  --ink: #1a1f1c;
+  --muted: #5a635c;
+  --forest: #1b3a2f;
+  --forest-light: #2a5343;
+  --forest-muted: #4a6b5c;
+  --accent: #0d8a52;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sand: var(--sand);
+  --color-sand-dark: var(--sand-dark);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-forest: var(--forest);
+  --color-forest-light: var(--forest-light);
+  --color-forest-muted: var(--forest-muted);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.7s ease-out both;
+}
+
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-150 {
+  animation-delay: 150ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--forest) 25%, transparent);
+}
