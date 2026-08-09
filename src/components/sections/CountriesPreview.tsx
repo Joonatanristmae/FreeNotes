@@ -7,7 +7,7 @@ export function CountriesPreview() {
     <section id="countries" className="scroll-mt-24 bg-paper px-6 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionTitle
-          eyebrow="Markets"
+          eyebrow="Countries"
           title="Where we operate"
           subtitle="Select your country for more information and to reserve advertising spots."
         />

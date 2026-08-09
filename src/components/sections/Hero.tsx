@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 
 export function Hero() {
   return (
-    <section className="relative border-b border-ink/8">
+    <section id="top" className="relative border-b border-ink/8">
       <div
         className="pointer-events-none absolute inset-0 overflow-hidden bg-[radial-gradient(ellipse_at_top_right,_rgba(27,58,47,0.08),_transparent_55%),linear-gradient(180deg,#F3F4F1_0%,#EAECE7_100%)]"
         aria-hidden

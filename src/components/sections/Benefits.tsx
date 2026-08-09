@@ -6,9 +6,7 @@ export function Benefits() {
     <section className="border-y border-ink/8 bg-sand/50 px-6 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <SectionTitle
-          eyebrow="Why FreeNotes"
           title="Why advertise with FreeNotes"
-          subtitle="Physical media that stays with students for months — not seconds."
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
