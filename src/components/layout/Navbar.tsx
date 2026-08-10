@@ -61,7 +61,7 @@ export function Navbar() {
             </NavItem>
           ))}
           <Button href="/#become-a-partner" size="sm">
-            Become a partner
+            Contact us
           </Button>
         </nav>
 
@@ -114,7 +114,7 @@ export function Navbar() {
               className="mt-2 w-full"
               onClick={() => setOpen(false)}
             >
-              Become a partner
+              Contact us
             </Button>
           </nav>
         </div>
