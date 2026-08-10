@@ -11,6 +11,7 @@ import { spring2028 } from "./batch-spring-2028";
  * - advertising rate card
  * - upcoming batches + placement availability
  * - previousPartners (leave [] until there are Lithuanian clients)
+ * - teamContacts (names + photos for the contact section)
  *
  * Rows marked isPlaceholder: true are mock data — replace before launch.
  */
@@ -100,4 +101,24 @@ export const lithuaniaInventory: CountryInventory = {
   batches: [autumn2027, spring2028],
   // No Lithuanian clients yet — section stays hidden until you add entries.
   previousPartners: [],
+  teamContacts: [
+    {
+      id: "kazimieras",
+      name: "Kazimieras",
+      role: "FreeNotes Lithuania",
+      photo: "/kazimieras.jpg",
+    },
+    {
+      id: "joonatan",
+      name: "Joonatan Ristmäe",
+      role: "FreeNotes Lithuania",
+      photo: "/meie fotod/joonatan.webp",
+    },
+    {
+      id: "auguste",
+      name: "Augustė Jasaitytė",
+      role: "FreeNotes Lithuania",
+      photo: null,
+    },
+  ],
 };

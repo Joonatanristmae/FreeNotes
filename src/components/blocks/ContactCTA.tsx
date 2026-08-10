@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { countries } from "@/data/countries";
+import { countries, getCountryHref } from "@/data/countries";
 import { siteConfig } from "@/data/site";
 
 export function ContactCTA() {
@@ -28,11 +28,7 @@ export function ContactCTA() {
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {selectableCountries.map((country) => {
-                const href = country.hasInventory
-                  ? `/${country.slug}`
-                  : country.active
-                    ? `/countries/${country.slug}`
-                    : "/countries";
+                const href = getCountryHref(country) ?? "/countries";
 
                 return (
                   <Link

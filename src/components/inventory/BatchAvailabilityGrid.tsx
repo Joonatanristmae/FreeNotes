@@ -42,7 +42,7 @@ export function BatchAvailabilityGrid({
         <LegendDot className="bg-rose-500" label="Sold" />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="columns-1 gap-x-3 sm:columns-2 lg:columns-3 xl:columns-4">
         {placements.map((placement) => {
           const style = statusStyles[placement.status];
           const isAvailable = placement.status === "available";
@@ -59,23 +59,21 @@ export function BatchAvailabilityGrid({
                 if (isAvailable) onSelectAvailable?.(placement);
               }}
               className={cn(
-                "flex min-h-[4.5rem] flex-col items-start justify-between border p-4 text-left transition-colors",
+                "mb-1 flex h-9 w-full break-inside-avoid items-center gap-2 border px-2.5 text-left text-sm transition-colors",
                 style.card,
                 isAvailable && "cursor-pointer",
                 !isAvailable && "cursor-default",
               )}
             >
-              <div className="flex w-full items-start justify-between gap-3">
-                <span className="font-medium text-ink">{placement.name}</span>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-ink/80">
-                  <span
-                    className={cn("h-2 w-2 rounded-full", style.dot)}
-                    aria-hidden
-                  />
-                  {style.label}
-                </span>
-              </div>
-              <span className="mt-3 text-sm tabular-nums text-ink">
+              <span
+                className={cn("h-2 w-2 shrink-0 rounded-full", style.dot)}
+                aria-hidden
+              />
+              <span className="min-w-0 flex-1 truncate font-medium text-ink">
+                {placement.name}
+              </span>
+              <span className="sr-only">{style.label}</span>
+              <span className="shrink-0 tabular-nums text-ink/80">
                 {showPrice ? formatPrice(placement.price) : "—"}
               </span>
             </button>

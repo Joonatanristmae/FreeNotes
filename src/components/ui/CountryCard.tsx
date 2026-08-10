@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Country } from "@/data/types";
+import { getCountryHref } from "@/data/countries";
 import { cn } from "@/lib/utils";
 
 type CountryCardProps = {
@@ -8,11 +9,7 @@ type CountryCardProps = {
 };
 
 export function CountryCard({ country, className }: CountryCardProps) {
-  const href = country.hasInventory
-    ? `/${country.slug}`
-    : country.active
-      ? `/countries/${country.slug}`
-      : null;
+  const href = getCountryHref(country);
 
   const content = (
     <div

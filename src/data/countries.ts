@@ -158,6 +158,7 @@ export const countries: Country[] = [
     flag: "🇱🇹",
     active: true,
     hasInventory: true,
+    path: "/lt",
     hero: {
       title: "FreeNotes Lithuania",
       subtitle:
@@ -207,4 +208,15 @@ export function getCountryBySlug(slug: string): Country | undefined {
 
 export function getActiveCountries(): Country[] {
   return countries.filter((c) => c.active);
+}
+
+/** Public href for a country card / nav chip. */
+export function getCountryHref(country: Country): string | null {
+  if (country.hasInventory) {
+    return country.path ?? `/${country.slug}`;
+  }
+  if (country.active) {
+    return `/countries/${country.slug}`;
+  }
+  return null;
 }

@@ -4,9 +4,15 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 
 type AdvertisingPricesProps = {
   prices: AdvertisingPrice[];
+  title?: string;
+  subtitle?: string;
 };
 
-export function AdvertisingPrices({ prices }: AdvertisingPricesProps) {
+export function AdvertisingPrices({
+  prices,
+  title = "Advertising prices",
+  subtitle = "Advertising funds the production and free distribution of the notebooks.",
+}: AdvertisingPricesProps) {
   const hasPlaceholders = prices.some((price) => price.isPlaceholder);
 
   return (
@@ -15,10 +21,7 @@ export function AdvertisingPrices({ prices }: AdvertisingPricesProps) {
       className="scroll-mt-24 border-y border-ink/8 bg-sand/30 px-6 py-14 sm:py-16"
     >
       <div className="mx-auto max-w-6xl">
-        <SectionTitle
-          title="Advertising prices"
-          subtitle="Advertising funds the production and free distribution of the notebooks."
-        />
+        <SectionTitle title={title} subtitle={subtitle} />
 
         {hasPlaceholders ? (
           <p className="mt-4 text-sm text-muted">

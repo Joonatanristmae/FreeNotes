@@ -35,8 +35,10 @@ export type Country = {
   name: string;
   flag: string;
   active: boolean;
-  /** When true, country card links to /{slug} inventory page */
+  /** When true, country card links to the inventory/market page */
   hasInventory?: boolean;
+  /** Public URL for the country page (e.g. "/lt"). Defaults to `/{slug}` when hasInventory. */
+  path?: string;
   hero: {
     title: string;
     subtitle: string;
@@ -124,6 +126,15 @@ export type NotebookBatch = {
   };
 };
 
+export type CountryTeamMember = {
+  id: string;
+  name: string;
+  role?: string;
+  /** Path under /public, or null while waiting for a photo. */
+  photo: string | null;
+  isPlaceholder?: boolean;
+};
+
 export type CountryInventory = {
   slug: string;
   name: string;
@@ -143,4 +154,6 @@ export type CountryInventory = {
    * Leave empty to hide the section (e.g. Lithuania has none yet).
    */
   previousPartners?: CountryPartner[];
+  /** Local contacts shown on the country page. */
+  teamContacts?: CountryTeamMember[];
 };

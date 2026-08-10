@@ -7,7 +7,7 @@ import { PricingCard } from "@/components/ui/PricingCard";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 import { StatisticCard } from "@/components/ui/StatisticCard";
 import { Button } from "@/components/ui/Button";
-import { countries, getCountryBySlug } from "@/data/countries";
+import { countries, getCountryBySlug, getCountryHref } from "@/data/countries";
 import { encodeAssetPath } from "@/lib/utils";
 
 type PageProps = {
@@ -15,9 +15,7 @@ type PageProps = {
 };
 
 export function generateStaticParams() {
-  return countries
-    .filter((c) => c.active && !c.hasInventory)
-    .map((c) => ({ slug: c.slug }));
+  return countries.map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -34,12 +32,36 @@ export default async function CountryPage({ params }: PageProps) {
   const { slug } = await params;
   const country = getCountryBySlug(slug);
 
-  if (!country || !country.active) {
+  if (!country) {
     notFound();
   }
 
   if (country.hasInventory) {
-    redirect(`/${country.slug}`);
+    redirect(getCountryHref(country) ?? `/${country.slug}`);
+  }
+
+  if (!country.active) {
+    return (
+      <section className="border-b border-ink/8 px-6 py-20 sm:py-24">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-4xl" aria-hidden>
+            {country.flag}
+          </p>
+          <h1 className="mt-4 font-display text-4xl tracking-tight text-ink sm:text-5xl">
+            {country.hero.title}
+          </h1>
+          <p className="mt-4 text-lg text-muted">{country.hero.subtitle}</p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Button href="/" size="lg">
+              Back to International
+            </Button>
+            <Button href="/#become-a-partner" variant="outline" size="lg">
+              Contact us
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

@@ -8,7 +8,30 @@ const headline = (
   </>
 );
 
-export function Hero() {
+type HeroCta = {
+  href: string;
+  label: string;
+};
+
+type HeroProps = {
+  primaryCta?: HeroCta;
+  secondaryCta?: HeroCta;
+};
+
+const defaultPrimary: HeroCta = {
+  href: "#countries",
+  label: "Select your country",
+};
+
+const defaultSecondary: HeroCta = {
+  href: "/#become-a-partner",
+  label: "Contact us",
+};
+
+export function Hero({
+  primaryCta = defaultPrimary,
+  secondaryCta = defaultSecondary,
+}: HeroProps = {}) {
   return (
     <section id="top" className="relative overflow-hidden border-b border-ink/8">
       <div
@@ -37,11 +60,11 @@ export function Hero() {
         </div>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button href="#countries" size="lg">
-            Select your country
+          <Button href={primaryCta.href} size="lg">
+            {primaryCta.label}
           </Button>
-          <Button href="/#become-a-partner" variant="outline" size="lg">
-            Contact us
+          <Button href={secondaryCta.href} variant="outline" size="lg">
+            {secondaryCta.label}
           </Button>
         </div>
       </div>
@@ -53,11 +76,11 @@ export function Hero() {
             {headline}
           </h1>
           <div className="mt-8 flex flex-row gap-3">
-            <Button href="#countries" size="lg">
-              Select your country
+            <Button href={primaryCta.href} size="lg">
+              {primaryCta.label}
             </Button>
-            <Button href="/#become-a-partner" variant="outline" size="lg">
-              Contact us
+            <Button href={secondaryCta.href} variant="outline" size="lg">
+              {secondaryCta.label}
             </Button>
           </div>
         </div>

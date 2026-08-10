@@ -5,21 +5,25 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 type DistributionLocationsProps = {
   countryName: string;
   locations: DistributionLocation[];
+  title?: string;
+  subtitle?: string;
 };
 
 export function DistributionLocations({
   countryName,
   locations,
+  title = "Where we distribute",
+  subtitle,
 }: DistributionLocationsProps) {
   const hasPlaceholders = locations.some((location) => location.isPlaceholder);
+  const resolvedSubtitle =
+    subtitle ??
+    `FreeNotes notebooks are distributed directly through schools to students in ${countryName}.`;
 
   return (
     <section id="distribution" className="scroll-mt-24 bg-paper px-6 py-14 sm:py-16">
       <div className="mx-auto max-w-6xl">
-        <SectionTitle
-          title="Where we distribute"
-          subtitle={`FreeNotes notebooks are distributed directly through schools to students in ${countryName}.`}
-        />
+        <SectionTitle title={title} subtitle={resolvedSubtitle} />
 
         {hasPlaceholders ? (
           <p className="mt-4 text-sm text-muted">

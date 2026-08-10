@@ -1,5 +1,5 @@
 import type { NotebookBatch } from "@/data/types";
-import { createPlacements } from "@/data/countries/_shared";
+import { createNotebookInventory } from "@/data/countries/_shared";
 
 /**
  * PLACEHOLDER batch — replace counts, dates, city, and placement statuses
@@ -23,28 +23,20 @@ export const autumn2027: NotebookBatch = {
     previewImage: "/images/ad-insert.webp",
     pdfUrl: "/media-kits/lithuania-autumn-2027.pdf",
   },
-  placements: createPlacements([
-    { id: "front-cover", name: "Front cover", status: "sold", price: 2200 },
-    { id: "back-cover", name: "Back cover", status: "available", price: 900 },
-    {
-      id: "inside-front",
-      name: "Inside front cover",
-      status: "reserved",
-      price: 700,
+  placements: createNotebookInventory({
+    coverPrices: {
+      front: 2200,
+      back: 900,
+      insideFront: 700,
+      insideBack: 700,
     },
-    {
-      id: "inside-back",
-      name: "Inside back cover",
-      status: "available",
-      price: 700,
+    pagePrice: 12,
+    pageCount: 48,
+    statusOverrides: {
+      "front-cover": "sold",
+      "inside-front": "reserved",
+      "page-2": "reserved",
+      "page-5": "sold",
     },
-    { id: "page-1", name: "Page 1", status: "available", price: 12 },
-    { id: "page-2", name: "Page 2", status: "reserved", price: 12 },
-    { id: "page-3", name: "Page 3", status: "available", price: 12 },
-    { id: "page-4", name: "Page 4", status: "available", price: 12 },
-    { id: "page-5", name: "Page 5", status: "sold", price: 12 },
-    { id: "page-6", name: "Page 6", status: "available", price: 12 },
-    { id: "page-7", name: "Page 7", status: "available", price: 12 },
-    { id: "page-8", name: "Page 8", status: "available", price: 12 },
-  ]),
+  }),
 };
