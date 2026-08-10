@@ -3,7 +3,7 @@ import { CountryAdvertisingInventory } from "@/components/inventory/CountryAdver
 import { estoniaInventory } from "@/data/countries/estonia";
 
 export const metadata: Metadata = {
-  title: "Advertising opportunities in Estonia",
+  title: "FreeNotes Estonia — Advertising",
   description: estoniaInventory.hero.subtitle,
 };
 

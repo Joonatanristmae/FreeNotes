@@ -160,7 +160,8 @@ export const countries: Country[] = [
     hasInventory: true,
     hero: {
       title: "FreeNotes Lithuania",
-      subtitle: "Coming soon — expand your student reach across the Baltics.",
+      subtitle:
+        "Free notebooks for Lithuanian students, funded by advertising.",
     },
     stats: [],
     universities: [],

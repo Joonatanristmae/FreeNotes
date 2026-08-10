@@ -1,13 +1,18 @@
 import type { NotebookBatch } from "@/data/types";
 import { createPlacements } from "@/data/countries/_shared";
 
+/**
+ * PLACEHOLDER batch — replace with real Lithuania inventory when confirmed.
+ */
 export const spring2028: NotebookBatch = {
   id: "lt-spring-2028",
-  name: "Spring 2028",
-  notebookCount: 5000,
-  distributionDate: "2028-02-01",
-  distributionLabel: "February 2028",
-  targetDescription: "Secondary schools and universities across Lithuania",
+  name: "Batch 2 — Kaunas",
+  city: "Kaunas",
+  notebookCount: 8000,
+  printDeadline: "2027-01-20",
+  printDeadlineLabel: "20 January 2027",
+  distributionLabel: "Kaunas schools",
+  targetDescription: "Secondary schools in Kaunas (placeholder)",
   bookingStatus: "coming-soon",
   previewImages: {
     cover: "/images/ad-back-cover.webp",
@@ -18,9 +23,20 @@ export const spring2028: NotebookBatch = {
     pdfUrl: "/media-kits/lithuania-spring-2028.pdf",
   },
   placements: createPlacements([
-    { id: "front-cover", name: "Front Cover", status: "available", price: 2200 },
-    { id: "back-cover", name: "Back Cover", status: "available", price: 900 },
-    { id: "inside-cover", name: "Inside Cover", status: "available", price: 700 },
+    { id: "front-cover", name: "Front cover", status: "available", price: 2200 },
+    { id: "back-cover", name: "Back cover", status: "available", price: 900 },
+    {
+      id: "inside-front",
+      name: "Inside front cover",
+      status: "available",
+      price: 700,
+    },
+    {
+      id: "inside-back",
+      name: "Inside back cover",
+      status: "available",
+      price: 700,
+    },
     { id: "page-1", name: "Page 1", status: "available", price: 12 },
     { id: "page-2", name: "Page 2", status: "available", price: 12 },
     { id: "page-3", name: "Page 3", status: "available", price: 12 },

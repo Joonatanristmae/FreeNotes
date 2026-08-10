@@ -10,15 +10,21 @@ type PlacementSeed = {
 export function createPlacements(seeds: PlacementSeed[]): Placement[] {
   return seeds.map((seed) => ({
     ...seed,
-    price: seed.status === "available" ? seed.price : undefined,
+    // Keep price visible for available + reserved; hide for sold.
+    price: seed.status === "sold" ? undefined : seed.price,
   }));
 }
 
-export function formatPrice(price?: number): string {
-  if (price === undefined) return "—";
+export function formatPrice(price?: number | null): string {
+  if (price === undefined || price === null) return "—";
   return new Intl.NumberFormat("en-EU", {
     style: "currency",
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(price);
+}
+
+export function formatCount(value: number | null): string {
+  if (value === null) return "TBD";
+  return value.toLocaleString("en-US");
 }
