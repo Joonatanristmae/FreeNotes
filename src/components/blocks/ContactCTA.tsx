@@ -22,8 +22,8 @@ export function ContactCTA() {
 
         <div className="relative mx-auto aspect-[5/4] w-full max-w-lg lg:mx-0 lg:max-w-none">
           <Image
-            src="/vihku-ava-ja-lõpukaaned.png"
-            alt="FreeNotes notebook covers with advertising"
+            src="/vihku-ut-avakaan-Photoroom.png"
+            alt="University of Tartu FreeNotes notebook cover"
             fill
             unoptimized
             className="object-contain object-center"
