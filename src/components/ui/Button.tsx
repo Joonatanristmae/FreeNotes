@@ -47,9 +47,9 @@ export function Button({
   );
 
   if (href) {
-    const isInternal = href.startsWith("/") || href.startsWith("#");
+    const isAppRoute = href.startsWith("/") && !href.includes("#");
 
-    if (isInternal) {
+    if (isAppRoute) {
       return (
         <Link href={href} className={classes} onClick={onClick}>
           {children}

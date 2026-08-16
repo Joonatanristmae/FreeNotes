@@ -35,8 +35,10 @@ export type Country = {
   name: string;
   flag: string;
   active: boolean;
-  /** When true, country card links to /{slug} inventory page */
+  /** When true, country card links to the inventory/market page */
   hasInventory?: boolean;
+  /** Public URL for the country page (e.g. "/lt"). Defaults to `/{slug}` when hasInventory. */
+  path?: string;
   hero: {
     title: string;
     subtitle: string;
@@ -76,11 +78,40 @@ export type Placement = {
 
 export type BookingStatus = "booking-open" | "coming-soon" | "closed";
 
+/** School / institution where notebooks are distributed. */
+export type DistributionLocation = {
+  id: string;
+  schoolName: string;
+  city: string;
+  /** Use null for unknown; replace with real counts later. */
+  studentCount: number | null;
+  /** Use null for unknown; replace with real counts later. */
+  notebookCount: number | null;
+  /** Mark true while this row is still mock/placeholder data. */
+  isPlaceholder?: boolean;
+};
+
+/** Country-level rate card (independent of a specific batch). */
+export type AdvertisingPrice = {
+  id: string;
+  name: string;
+  description: string;
+  /** EUR amount, or null when price is on request / not set yet. */
+  price: number | null;
+  /** Mark true while this price is still mock/placeholder data. */
+  isPlaceholder?: boolean;
+};
+
 export type NotebookBatch = {
   id: string;
   name: string;
+  city: string;
   notebookCount: number;
-  distributionDate: string;
+  /** ISO date string for sorting, e.g. "2027-09-15" */
+  printDeadline: string;
+  /** Human-readable print deadline, e.g. "15 September 2027" */
+  printDeadlineLabel: string;
+  /** Where notebooks will be distributed */
   distributionLabel: string;
   targetDescription: string;
   bookingStatus: BookingStatus;
@@ -95,6 +126,15 @@ export type NotebookBatch = {
   };
 };
 
+export type CountryTeamMember = {
+  id: string;
+  name: string;
+  role?: string;
+  /** Path under /public, or null while waiting for a photo. */
+  photo: string | null;
+  isPlaceholder?: boolean;
+};
+
 export type CountryInventory = {
   slug: string;
   name: string;
@@ -104,5 +144,16 @@ export type CountryInventory = {
     subtitle: string;
     image: string;
   };
+  /** Schools/cities where notebooks reach students. */
+  distributionLocations: DistributionLocation[];
+  /** Standard advertising rate card for this country. */
+  advertisingPrices: AdvertisingPrice[];
   batches: NotebookBatch[];
+  /**
+   * Previous advertising partners for this country.
+   * Leave empty to hide the section (e.g. Lithuania has none yet).
+   */
+  previousPartners?: CountryPartner[];
+  /** Local contacts shown on the country page. */
+  teamContacts?: CountryTeamMember[];
 };

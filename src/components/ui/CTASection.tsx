@@ -6,7 +6,10 @@ type CTASectionProps = {
   subtitle?: string;
   buttonLabel: string;
   buttonHref: string;
+  secondaryButtonLabel?: string;
+  secondaryButtonHref?: string;
   className?: string;
+  id?: string;
 };
 
 export function CTASection({
@@ -14,12 +17,17 @@ export function CTASection({
   subtitle,
   buttonLabel,
   buttonHref,
+  secondaryButtonLabel,
+  secondaryButtonHref,
   className,
+  id,
 }: CTASectionProps) {
   return (
     <section
+      id={id}
       className={cn(
         "relative overflow-hidden bg-forest px-6 py-20 sm:py-24",
+        id && "scroll-mt-24",
         className,
       )}
     >
@@ -41,10 +49,20 @@ export function CTASection({
             {subtitle}
           </p>
         ) : null}
-        <div className="mt-8">
+        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button href={buttonHref} variant="secondary" size="lg">
             {buttonLabel}
           </Button>
+          {secondaryButtonLabel && secondaryButtonHref ? (
+            <Button
+              href={secondaryButtonHref}
+              variant="ghost"
+              size="lg"
+              className="border border-white/35 text-white hover:bg-white/10 hover:text-white"
+            >
+              {secondaryButtonLabel}
+            </Button>
+          ) : null}
         </div>
       </div>
     </section>

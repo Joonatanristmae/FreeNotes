@@ -11,23 +11,10 @@ export const siteConfig = {
   url: "https://freenotes.eu",
 };
 
-export const footerNav = {
-  company: [
-    { label: "About", href: "/about" },
-    { label: "Countries", href: "/countries" },
-    { label: "Partners", href: "/partners" },
-  ] as NavLink[],
-  advertising: [
-    { label: "Advertising options", href: "/estonia" },
-    { label: "Contact", href: "/contact" },
-  ] as NavLink[],
-};
-
 export const navLinks: NavLink[] = [
-  { label: "Countries", href: "/countries" },
-  { label: "Partners", href: "/partners" },
+  { label: "Countries", href: "/#countries" },
+  { label: "Partners", href: "/#partners" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
 ];
 
 export const globalStats: Statistic[] = [
@@ -49,7 +36,7 @@ export const howItWorks = [
     step: "02",
     title: "We create and distribute notebooks",
     description:
-      "We produce high-quality notebooks and distribute them directly to students.",
+      "We produce notebooks and deliver them to school buildings, where students can take them for free."
   },
   {
     id: "use",
@@ -62,22 +49,24 @@ export const howItWorks = [
 export const benefits = [
   {
     id: "exposure",
-    title: "Long exposure",
+    title: "Long repeated exposure",
     description: "Students use notebooks every day for months.",
   },
   {
     id: "targeted",
     title: "Targeted audience",
-    description: "Reach students aged 16–25 directly.",
+    description: "Reach students aged 16–28 directly.",
   },
   {
-    id: "physical",
-    title: "Physical connection",
-    description: "Become part of students' everyday life.",
+    id: "regional",
+    title: "Choose your region/city",
+    description:
+      "Target the cities or regions that matter to you — notebooks go exactly where you want them.",
   },
   {
-    id: "meaningful",
-    title: "Meaningful advertising",
-    description: "Support education while promoting your brand.",
+    id: "flexible",
+    title: "Flexible scale and budget",
+    description:
+      "From a few pages in a small run for around €20 to many pages across thousands of notebooks — we have something for every budget.",
   },
 ];
