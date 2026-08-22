@@ -1,3 +1,5 @@
+import type { NavLink } from "./types";
+
 /**
  * Central list for the header country/region selector.
  * Add a new market here only — Navbar reads from this list.
@@ -12,6 +14,10 @@ export type RegionOption = {
   name: string;
   flag: string;
   href: string;
+  /** Navbar "Contact us" target for pages in this region. */
+  contactHref: string;
+  /** Optional in-page nav links for country marketing pages. */
+  navLinks?: NavLink[];
   /** Path prefixes that mark this region as current (exact or prefix match). */
   matchPaths: string[];
 };
@@ -22,6 +28,7 @@ export const regionOptions: RegionOption[] = [
     name: "Estonia",
     flag: "🇪🇪",
     href: "/estonia",
+    contactHref: "/#become-a-partner",
     matchPaths: ["/estonia", "/countries/estonia"],
   },
   {
@@ -29,6 +36,12 @@ export const regionOptions: RegionOption[] = [
     name: "Lithuania",
     flag: "🇱🇹",
     href: "/lt",
+    contactHref: "/lt#contact",
+    navLinks: [
+      { label: "Pricing", href: "/lt#advertising-prices" },
+      { label: "Upcoming batches", href: "/lt#upcoming-batches" },
+      { label: "Contact us", href: "/lt#contact" },
+    ],
     matchPaths: ["/lt", "/lithuania", "/countries/lithuania"],
   },
   {
@@ -36,6 +49,7 @@ export const regionOptions: RegionOption[] = [
     name: "Finland",
     flag: "🇫🇮",
     href: "/countries/finland",
+    contactHref: "/#become-a-partner",
     matchPaths: ["/countries/finland"],
   },
   {
@@ -43,6 +57,7 @@ export const regionOptions: RegionOption[] = [
     name: "United Kingdom",
     flag: "🇬🇧",
     href: "/countries/united-kingdom",
+    contactHref: "/#become-a-partner",
     matchPaths: ["/countries/united-kingdom"],
   },
   {
@@ -50,6 +65,7 @@ export const regionOptions: RegionOption[] = [
     name: "International",
     flag: "🌍",
     href: "/",
+    contactHref: "/#become-a-partner",
     matchPaths: ["/"],
   },
 ];
@@ -73,4 +89,12 @@ export function getRegionByPathname(pathname: string): RegionOption {
   });
 
   return match ?? defaultRegion;
+}
+
+export function getContactHrefByPathname(pathname: string): string {
+  return getRegionByPathname(pathname).contactHref;
+}
+
+export function getNavLinksByPathname(pathname: string): NavLink[] | null {
+  return getRegionByPathname(pathname).navLinks ?? null;
 }

@@ -24,6 +24,7 @@
   --color-accent: var(--accent);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  --font-slab: var(--font-slab);
 }
 
 html {
@@ -38,6 +39,14 @@ body {
 
 .font-display {
   font-family: var(--font-display), Georgia, serif;
+}
+
+.font-slab {
+  font-family: var(--font-slab), "Roboto Slab", Georgia, serif;
+}
+
+.font-pt-serif {
+  font-family: var(--font-pt-serif), "PT Serif", Georgia, serif;
 }
 
 @keyframes fade-up {

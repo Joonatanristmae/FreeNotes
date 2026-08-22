@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { Fraunces, PT_Serif, Roboto_Slab, Source_Sans_3 } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { siteConfig } from "@/data/site";
@@ -17,6 +17,20 @@ const body = Source_Sans_3({
   display: "swap",
 });
 
+const slab = Roboto_Slab({
+  variable: "--font-slab",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  display: "swap",
+});
+
+const ptSerif = PT_Serif({
+  variable: "--font-pt-serif",
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: `${siteConfig.name} — Student notebook advertising`,
@@ -31,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${slab.variable} ${ptSerif.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink">
         <Navbar />
         <main className="flex-1">{children}</main>

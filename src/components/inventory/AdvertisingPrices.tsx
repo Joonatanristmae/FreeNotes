@@ -1,5 +1,5 @@
 import type { AdvertisingPrice } from "@/data/types";
-import { formatPrice } from "@/data/countries/_shared";
+import { AdvertisingPriceCard } from "@/components/inventory/AdvertisingPriceCard";
 import { SectionTitle } from "@/components/ui/SectionTitle";
 
 type AdvertisingPricesProps = {
@@ -30,29 +30,9 @@ export function AdvertisingPrices({
           </p>
         ) : null}
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2">
           {prices.map((item) => (
-            <article
-              key={item.id}
-              className="flex flex-col border border-ink/8 bg-white p-5 shadow-sm"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-display text-xl tracking-tight text-ink">
-                  {item.name}
-                </h3>
-                {item.isPlaceholder ? (
-                  <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-muted">
-                    Placeholder
-                  </span>
-                ) : null}
-              </div>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
-                {item.description}
-              </p>
-              <p className="mt-5 font-display text-2xl tracking-tight text-forest">
-                {item.price === null ? "On request" : formatPrice(item.price)}
-              </p>
-            </article>
+            <AdvertisingPriceCard key={item.id} item={item} />
           ))}
         </div>
       </div>

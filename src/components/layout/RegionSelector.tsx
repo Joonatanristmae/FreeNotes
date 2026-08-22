@@ -12,11 +12,17 @@ import { cn } from "@/lib/utils";
 
 type RegionSelectorProps = {
   className?: string;
+  /** Emphasize the selector in the header (country marketing pages). */
+  prominent?: boolean;
   /** Called after a region is chosen (e.g. close mobile nav). */
   onNavigate?: () => void;
 };
 
-export function RegionSelector({ className, onNavigate }: RegionSelectorProps) {
+export function RegionSelector({
+  className,
+  prominent = false,
+  onNavigate,
+}: RegionSelectorProps) {
   const pathname = usePathname();
   const current = getRegionByPathname(pathname);
   const [open, setOpen] = useState(false);
@@ -61,10 +67,13 @@ export function RegionSelector({ className, onNavigate }: RegionSelectorProps) {
       <button
         type="button"
         className={cn(
-          "inline-flex max-w-full items-center gap-1.5 rounded-md px-2.5 py-1.5 text-sm font-medium text-muted transition-colors",
-          "hover:bg-sand/60 hover:text-ink",
+          "inline-flex max-w-full items-center gap-1.5 rounded-md transition-colors",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest/40 focus-visible:ring-offset-2",
-          open && "bg-sand/60 text-ink",
+          prominent
+            ? "border-2 border-forest bg-forest px-3.5 py-2 text-sm font-semibold text-white shadow-sm shadow-forest/20 hover:bg-forest-light"
+            : "px-2.5 py-1.5 text-sm font-medium text-muted hover:bg-sand/60 hover:text-ink",
+          !prominent && open && "bg-sand/60 text-ink",
+          prominent && open && "bg-forest-light",
         )}
         aria-label={`Select country or region. Current: ${current.name}`}
         aria-haspopup="listbox"
@@ -79,7 +88,8 @@ export function RegionSelector({ className, onNavigate }: RegionSelectorProps) {
         <span
           aria-hidden
           className={cn(
-            "text-[0.65rem] text-muted transition-transform",
+            "text-[0.65rem] transition-transform",
+            prominent ? "text-white/80" : "text-muted",
             open && "rotate-180",
           )}
         >
