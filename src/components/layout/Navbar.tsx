@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { getRegionByPathname } from "@/data/regions";
 import { navLinks, siteConfig } from "@/data/site";
 import { RegionSelector } from "@/components/layout/RegionSelector";
 import { Button } from "@/components/ui/Button";
@@ -36,13 +38,20 @@ function NavItem({
 }
 
 export function Navbar() {
+  const pathname = usePathname();
+  const region = getRegionByPathname(pathname);
+  const contactHref = region.contactHref;
+  const regionNavLinks = region.navLinks ?? null;
+  const links = regionNavLinks ?? navLinks;
+  const showContactButton = !regionNavLinks;
+  const logoHref = regionNavLinks ? `${region.href}#top` : "/#top";
   const [open, setOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-ink/8 bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-3 px-6 lg:h-[4.5rem]">
         <NavItem
-          href="/#top"
+          href={logoHref}
           className="flex min-w-0 items-center gap-3"
           onClick={() => setOpen(false)}
         >
@@ -51,8 +60,8 @@ export function Navbar() {
           </span>
         </NavItem>
 
-        <nav className="hidden items-center gap-6 md:flex lg:gap-8">
-          {navLinks.map((link) => (
+        <nav className="hidden items-center gap-5 md:flex lg:gap-6">
+          {links.map((link) => (
             <NavItem
               key={link.href}
               href={link.href}
@@ -61,14 +70,19 @@ export function Navbar() {
               {link.label}
             </NavItem>
           ))}
-          <RegionSelector />
-          <Button href="/#become-a-partner" size="sm">
-            Contact us
-          </Button>
+          <RegionSelector prominent={Boolean(regionNavLinks)} />
+          {showContactButton ? (
+            <Button href={contactHref} size="sm">
+              Contact us
+            </Button>
+          ) : null}
         </nav>
 
-        <div className="flex items-center gap-1 md:hidden">
-          <RegionSelector onNavigate={() => setOpen(false)} />
+        <div className="flex items-center gap-2 md:hidden">
+          <RegionSelector
+            prominent={Boolean(regionNavLinks)}
+            onNavigate={() => setOpen(false)}
+          />
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-md text-ink"
@@ -104,7 +118,7 @@ export function Navbar() {
       {open ? (
         <div className="border-t border-ink/8 bg-paper px-6 py-6 md:hidden">
           <nav className="flex flex-col gap-4">
-            {navLinks.map((link) => (
+            {links.map((link) => (
               <NavItem
                 key={link.href}
                 href={link.href}
@@ -114,13 +128,15 @@ export function Navbar() {
                 {link.label}
               </NavItem>
             ))}
-            <Button
-              href="/#become-a-partner"
-              className="mt-2 w-full"
-              onClick={() => setOpen(false)}
-            >
-              Contact us
-            </Button>
+            {showContactButton ? (
+              <Button
+                href={contactHref}
+                className="mt-2 w-full"
+                onClick={() => setOpen(false)}
+              >
+                Contact us
+              </Button>
+            ) : null}
           </nav>
         </div>
       ) : null}

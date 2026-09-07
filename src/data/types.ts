@@ -98,6 +98,20 @@ export type AdvertisingPrice = {
   description: string;
   /** EUR amount, or null when price is on request / not set yet. */
   price: number | null;
+  /** Optional path to a placement preview image (e.g. /hinnakiri2/esikaas.png). */
+  image?: string;
+  /** Shown after the price, e.g. "+VAT / 5000 vihikut". */
+  priceSuffix?: string;
+  /** Secondary line under the price, e.g. "(kokku vihikus 60tk)". */
+  priceNote?: string;
+  /** Placement dimensions — shown in the info tooltip on hover. */
+  size?: string;
+  /** Preview image placement within the price card. */
+  imagePosition?: "left" | "right";
+  /** Clockwise rotation in degrees for the preview image (default 14 on right-side images). */
+  imageRotation?: number;
+  /** Align the preview image to the top edge of the card. */
+  imageAlignTop?: boolean;
   /** Mark true while this price is still mock/placeholder data. */
   isPlaceholder?: boolean;
 };
