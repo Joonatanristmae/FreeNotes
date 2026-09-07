@@ -104,7 +104,7 @@ export const lithuaniaInventory: CountryInventory = {
   teamContacts: [
     {
       id: "kazimieras",
-      name: "Kazimieras",
+      name: "Kazimieras Jasaitis",
       role: "FreeNotes Lithuania",
       photo: "/kazimieras.jpg",
     },
