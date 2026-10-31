@@ -40,6 +40,56 @@ function NavItem({
   );
 }
 
+function LithuaniaLangSwitch({
+  pathname,
+  className,
+  onNavigate,
+}: {
+  pathname: string;
+  className?: string;
+  onNavigate?: () => void;
+}) {
+  const isEn = pathname === "/lt-en" || pathname.startsWith("/lt-en/");
+  const isLt = pathname === "/lt" || pathname.startsWith("/lt/");
+  if (!isEn && !isLt) return null;
+
+  const optionClass = (active: boolean) =>
+    cn(
+      "px-2 py-1 text-sm font-medium transition-colors",
+      active ? "bg-forest text-white" : "text-muted hover:text-ink",
+    );
+
+  return (
+    <div
+      className={cn(
+        "inline-flex items-center overflow-hidden rounded-md border border-ink/15",
+        className,
+      )}
+      role="group"
+      aria-label="Language"
+    >
+      <Link
+        href="/lt"
+        hrefLang="lt"
+        className={optionClass(isLt)}
+        aria-current={isLt ? "page" : undefined}
+        onClick={onNavigate}
+      >
+        LT
+      </Link>
+      <Link
+        href="/lt-en"
+        hrefLang="en"
+        className={optionClass(isEn)}
+        aria-current={isEn ? "page" : undefined}
+        onClick={onNavigate}
+      >
+        EN
+      </Link>
+    </div>
+  );
+}
+
 export function Navbar() {
   const pathname = usePathname();
   const region = getRegionByPathname(pathname);
@@ -78,6 +128,7 @@ export function Navbar() {
               {link.label}
             </NavItem>
           ))}
+          <LithuaniaLangSwitch pathname={pathname} />
           <RegionSelector prominent={Boolean(regionNavLinks)} />
           {showContactButton ? (
             <Button href={contactHref} size="sm">
@@ -87,6 +138,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
+          <LithuaniaLangSwitch pathname={pathname} />
           <RegionSelector
             prominent={Boolean(regionNavLinks)}
             onNavigate={() => setOpen(false)}

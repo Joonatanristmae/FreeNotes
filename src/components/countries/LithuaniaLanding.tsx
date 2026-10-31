@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { AdvertisingPrices } from "@/components/inventory/AdvertisingPrices";
 import { CountryBatchesSection } from "@/components/inventory/CountryBatchesSection";
 import { CountryTeamContact } from "@/components/inventory/CountryTeamContact";
@@ -33,21 +32,6 @@ export function LithuaniaLanding({ locale }: LithuaniaLandingProps) {
 
   return (
     <>
-      <div className="border-b border-ink/8 bg-paper/80">
-        <div className="mx-auto flex max-w-6xl items-center justify-end gap-3 px-6 py-2 text-sm">
-          <span className="text-muted" aria-hidden>
-            {locale === "lt" ? "LT" : "EN"}
-          </span>
-          <Link
-            href={copy.alternateHref}
-            className="font-medium text-forest underline-offset-2 hover:underline"
-            hrefLang={copy.alternateLocale}
-          >
-            {copy.langSwitchLabel}
-          </Link>
-        </div>
-      </div>
-
       <Hero
         headline={headline}
         imageAlt={copy.hero.imageAlt}
