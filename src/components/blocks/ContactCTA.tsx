@@ -29,15 +29,26 @@ export function ContactCTA() {
             <div className="mt-4 flex flex-wrap gap-2">
               {selectableCountries.map((country) => {
                 const href = getCountryHref(country) ?? "/countries";
-
-                return (
-                  <Link
-                    key={country.slug}
-                    href={href}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-white/25 bg-white/5 px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:border-white/50 hover:bg-white/10"
-                  >
+                const className =
+                  "inline-flex items-center gap-1.5 rounded-md border border-white/25 bg-white/5 px-3.5 py-1.5 text-sm font-medium text-white transition-colors hover:border-white/50 hover:bg-white/10";
+                const label = (
+                  <>
                     <span aria-hidden>{country.flag}</span>
                     {country.name}
+                  </>
+                );
+
+                if (/^https?:\/\//i.test(href)) {
+                  return (
+                    <a key={country.slug} href={href} className={className}>
+                      {label}
+                    </a>
+                  );
+                }
+
+                return (
+                  <Link key={country.slug} href={href} className={className}>
+                    {label}
                   </Link>
                 );
               })}

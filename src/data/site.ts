@@ -12,8 +12,8 @@ export const siteConfig = {
 };
 
 export const navLinks: NavLink[] = [
-  { label: "Countries", href: "/#countries" },
-  { label: "Partners", href: "/#partners" },
+  { label: "Countries", href: "/international#countries" },
+  { label: "Partners", href: "/international#partners" },
   { label: "About", href: "/about" },
 ];
 

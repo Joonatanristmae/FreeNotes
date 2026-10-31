@@ -7,6 +7,14 @@ type DistributionLocationsProps = {
   locations: DistributionLocation[];
   title?: string;
   subtitle?: string;
+  placeholderNote?: string;
+  columns?: {
+    school: string;
+    city: string;
+    students: string;
+    notebooks: string;
+  };
+  placeholderTag?: string;
 };
 
 export function DistributionLocations({
@@ -14,6 +22,14 @@ export function DistributionLocations({
   locations,
   title = "Where we distribute",
   subtitle,
+  placeholderNote = "School list below is placeholder data — replace in country data when confirmed.",
+  columns = {
+    school: "School",
+    city: "City",
+    students: "Students",
+    notebooks: "Notebooks",
+  },
+  placeholderTag = "placeholder",
 }: DistributionLocationsProps) {
   const hasPlaceholders = locations.some((location) => location.isPlaceholder);
   const resolvedSubtitle =
@@ -26,10 +42,7 @@ export function DistributionLocations({
         <SectionTitle title={title} subtitle={resolvedSubtitle} />
 
         {hasPlaceholders ? (
-          <p className="mt-4 text-sm text-muted">
-            School list below is placeholder data — replace in country data when
-            confirmed.
-          </p>
+          <p className="mt-4 text-sm text-muted">{placeholderNote}</p>
         ) : null}
 
         <div className="mt-8 overflow-hidden rounded-xl border border-ink/8 bg-white shadow-sm">
@@ -37,13 +50,17 @@ export function DistributionLocations({
             <table className="w-full min-w-[560px] border-collapse text-left text-sm">
               <thead>
                 <tr className="border-b border-ink/10 bg-sand/40">
-                  <th className="px-4 py-3 font-semibold text-ink">School</th>
-                  <th className="px-4 py-3 font-semibold text-ink">City</th>
-                  <th className="px-4 py-3 text-right font-semibold text-ink">
-                    Students
+                  <th className="px-4 py-3 font-semibold text-ink">
+                    {columns.school}
+                  </th>
+                  <th className="px-4 py-3 font-semibold text-ink">
+                    {columns.city}
                   </th>
                   <th className="px-4 py-3 text-right font-semibold text-ink">
-                    Notebooks
+                    {columns.students}
+                  </th>
+                  <th className="px-4 py-3 text-right font-semibold text-ink">
+                    {columns.notebooks}
                   </th>
                 </tr>
               </thead>
@@ -57,7 +74,7 @@ export function DistributionLocations({
                       {location.schoolName}
                       {location.isPlaceholder ? (
                         <span className="ml-2 text-xs font-normal text-muted">
-                          placeholder
+                          {placeholderTag}
                         </span>
                       ) : null}
                     </td>

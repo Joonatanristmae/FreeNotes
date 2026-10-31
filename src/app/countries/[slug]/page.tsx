@@ -55,7 +55,7 @@ export default async function CountryPage({ params }: PageProps) {
             <Button href="/" size="lg">
               Back to International
             </Button>
-            <Button href="/#become-a-partner" variant="outline" size="lg">
+            <Button href="/international#become-a-partner" variant="outline" size="lg">
               Contact us
             </Button>
           </div>

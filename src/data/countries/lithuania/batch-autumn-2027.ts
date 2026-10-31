@@ -1,19 +1,17 @@
 import type { NotebookBatch } from "@/data/types";
 import { createNotebookInventory } from "@/data/countries/_shared";
 
-/**
- * PLACEHOLDER batch — replace counts, dates, city, and placement statuses
- * with real Lithuania inventory when confirmed.
- */
 export const autumn2027: NotebookBatch = {
   id: "lt-autumn-2027",
-  name: "Batch 1 — Vilnius",
-  city: "Vilnius",
+  name: "Batch 1 — Kaunas",
+  city: "Kaunas",
   notebookCount: 10000,
-  printDeadline: "2026-09-15",
-  printDeadlineLabel: "15 September 2026",
-  distributionLabel: "Vilnius schools",
-  targetDescription: "Secondary schools and universities in Vilnius (placeholder)",
+  printDeadline: "2027-06-01",
+  printDeadlineLabel: "1 June 2027",
+  designDeadlineLabel: "1 June 2027",
+  distributionStartLabel: "September 2027",
+  distributionLabel: "universities in Kaunas",
+  targetDescription: "Universities in Kaunas",
   bookingStatus: "booking-open",
   previewImages: {
     cover: "/images/ad-front-cover.webp",
@@ -32,11 +30,9 @@ export const autumn2027: NotebookBatch = {
     },
     pagePrice: 12,
     pageCount: 48,
-    statusOverrides: {
-      "front-cover": "sold",
-      "inside-front": "reserved",
-      "page-2": "reserved",
-      "page-5": "sold",
+    nameOverrides: {
+      "page-25": "Middle full page",
+      "page-26": "Middle full page",
     },
   }),
 };

@@ -26,6 +26,8 @@ type NotebookInventoryOptions = {
   pageCount?: number;
   /** Override status for specific placement ids (e.g. "page-3", "front-cover"). */
   statusOverrides?: Partial<Record<string, PlacementStatus>>;
+  /** Override display names for specific placement ids. */
+  nameOverrides?: Partial<Record<string, string>>;
 };
 
 /** Covers + inside covers + numbered pages (default 48). */
@@ -34,20 +36,23 @@ export function createNotebookInventory({
   pagePrice,
   pageCount = 48,
   statusOverrides = {},
+  nameOverrides = {},
 }: NotebookInventoryOptions): Placement[] {
   const statusFor = (id: string): PlacementStatus =>
     statusOverrides[id] ?? "available";
+  const nameFor = (id: string, fallback: string) =>
+    nameOverrides[id] ?? fallback;
 
   const coversStart: PlacementSeed[] = [
     {
       id: "front-cover",
-      name: "Front cover",
+      name: nameFor("front-cover", "Front cover"),
       status: statusFor("front-cover"),
       price: coverPrices.front,
     },
     {
       id: "inside-front",
-      name: "Inside front cover",
+      name: nameFor("inside-front", "Inside front cover"),
       status: statusFor("inside-front"),
       price: coverPrices.insideFront,
     },
@@ -58,7 +63,7 @@ export function createNotebookInventory({
     const id = `page-${n}`;
     return {
       id,
-      name: `Page ${n}`,
+      name: nameFor(id, `Page ${n}`),
       status: statusFor(id),
       price: pagePrice,
     };
@@ -67,13 +72,13 @@ export function createNotebookInventory({
   const coversEnd: PlacementSeed[] = [
     {
       id: "inside-back",
-      name: "Inside back cover",
+      name: nameFor("inside-back", "Inside back cover"),
       status: statusFor("inside-back"),
       price: coverPrices.insideBack,
     },
     {
       id: "back-cover",
-      name: "Back cover",
+      name: nameFor("back-cover", "Back cover"),
       status: statusFor("back-cover"),
       price: coverPrices.back,
     },

@@ -1,6 +1,8 @@
 "use client";
 
-import Image from "next/image";import type { AdvertisingPrice } from "@/data/types";
+import Image from "next/image";
+import { useLayoutEffect, useRef, useState } from "react";
+import type { AdvertisingPrice } from "@/data/types";
 import { formatPrice } from "@/data/countries/_shared";
 import { cn, encodeAssetPath } from "@/lib/utils";
 
@@ -24,11 +26,28 @@ function renderInlinePriceSuffix(suffix: string) {
   );
 }
 
+/** Preferred title indent when the card is wide enough. */
+const PREFERRED_INDENT_PX = 40;
+/** Minimum width reserved for title/price before touching image size. */
+const MIN_TEXT_PX = 132;
+const GAP_PX = 12;
+/**
+ * Keep images near the working "Inside back cover" size.
+ * Only go below this in extremely narrow single-column cards.
+ */
+const IMAGE_FLOOR_PX = 168;
+
 type AdvertisingPriceCardProps = {
   item: AdvertisingPrice;
+  sizePrefix?: string;
+  moreInfoAria?: string;
 };
 
-export function AdvertisingPriceCard({ item }: AdvertisingPriceCardProps) {
+export function AdvertisingPriceCard({
+  item,
+  sizePrefix = "Size:",
+  moreInfoAria = "More info about",
+}: AdvertisingPriceCardProps) {
   const imageOnLeft = item.imagePosition === "left";
   const imageRotation = item.imageRotation ?? (imageOnLeft ? 0 : 14);
   const imageAlignTop = item.imageAlignTop ?? false;
@@ -38,35 +57,81 @@ export function AdvertisingPriceCard({ item }: AdvertisingPriceCardProps) {
     "tagakaane-sisekylg",
     "valemileht",
   ].includes(item.id);
-  const largeImage = item.id === "tagakaas";
+  const isFrontCover = item.id === "esikaas";
+  const isBackCover = item.id === "tagakaas";
+  const largeImage = isFrontCover || isBackCover;
   const enlargedLeftImage = item.id === "tagakaane-sisekylg";
   const alignImageRight = item.id === "valemileht";
   const raisedPriceLayout = item.id === "tavaleht";
   const infoText = item.size ?? item.description;
+  // Tune front/back cover image sizes independently.
+  const coverScale = isFrontCover ? 1.1 : isBackCover ? 0.95 : null;
 
-  const imageBlock = item.image ? (    <div
-      className={cn(
-        "relative shrink-0",
-        alignImageRight || raisedPriceLayout || largeImage
-          ? "overflow-visible"
-          : "overflow-hidden",
-        imageOnLeft
-          ? cn(
-              "-my-5 min-w-[6rem] self-stretch",
-              enlargedLeftImage ? "w-[50%]" : "w-[45%]",
-            )
-          : cn(
-              "min-w-[5rem]",
-              largeImage
-                ? "-mr-5 w-[42%]"
-                : alignImageRight
-                  ? "-my-5 -mr-5 -ml-4 w-[50%] self-stretch sm:-ml-5"
-                  : "-mr-5 w-[48%]",
-              !alignImageRight &&
-                (imageAlignTop ? "-mt-5 self-start" : "-my-5 self-stretch"),
-              alignImageRight && "-my-5 self-stretch",
-            ),
-      )}
+  // Match the comfortable left-image cards (~45% of content width).
+  const preferredImagePx = largeImage
+    ? 220
+    : enlargedLeftImage
+      ? 208
+      : alignImageRight
+        ? 200
+        : 196;
+
+  const cardRef = useRef<HTMLElement>(null);
+  const [indentPx, setIndentPx] = useState(imageOnLeft ? 0 : PREFERRED_INDENT_PX);
+  const [imagePx, setImagePx] = useState(preferredImagePx);
+
+  useLayoutEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+
+    const update = () => {
+      const styles = getComputedStyle(card);
+      const padX =
+        (parseFloat(styles.paddingLeft) || 0) +
+        (parseFloat(styles.paddingRight) || 0);
+      const available = Math.max(0, card.clientWidth - padX - GAP_PX);
+
+      // Stable image size like "Inside back cover": ~45% of card, capped by preference.
+      let imageWidth = Math.min(
+        preferredImagePx,
+        Math.round(available * 0.45),
+      );
+      imageWidth = Math.max(imageWidth, Math.min(IMAGE_FLOOR_PX, available));
+
+      // 1) Spend leftover squeeze on indent first (right-image cards).
+      let indent = imageOnLeft ? 0 : PREFERRED_INDENT_PX;
+      const textRoom = available - imageWidth;
+      if (textRoom - indent < MIN_TEXT_PX) {
+        indent = Math.max(0, textRoom - MIN_TEXT_PX);
+      }
+
+      // 2) Only if text would still be unusable, nudge image down — never tiny.
+      if (available - imageWidth - indent < MIN_TEXT_PX * 0.7) {
+        imageWidth = Math.max(
+          IMAGE_FLOOR_PX,
+          available - indent - Math.floor(MIN_TEXT_PX * 0.7),
+        );
+      }
+
+      setIndentPx(indent);
+      setImagePx(imageWidth);
+    };
+
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, [imageOnLeft, preferredImagePx]);
+
+  const imageBlock = item.image ? (
+    <div
+      className="relative shrink-0 self-stretch overflow-hidden"
+      style={{
+        width: imagePx,
+        marginTop: "-1.25rem",
+        marginBottom: "-1.25rem",
+        marginRight: imageOnLeft ? undefined : "-1.25rem",
+      }}
     >
       <Image
         src={encodeAssetPath(item.image)}
@@ -75,49 +140,38 @@ export function AdvertisingPriceCard({ item }: AdvertisingPriceCardProps) {
         height={480}
         unoptimized
         className={cn(
-          "h-full w-full object-contain",
+          "h-full w-full max-h-full object-contain",
           imageOnLeft
             ? "object-left object-center"
             : imageAlignTop
               ? "object-right object-top"
-              : "object-right",
-          imageAlignTop &&
-            !alignImageRight &&
-            "h-auto max-h-[calc(100%+1.25rem)]",
+              : "object-right object-center",
         )}
         style={
-          imageRotation ||
-          largeImage ||
-          alignImageRight ||
-          enlargedLeftImage ||
-          raisedPriceLayout
+          imageRotation || coverScale || alignImageRight || enlargedLeftImage
             ? {
-                ...(alignImageRight || raisedPriceLayout || largeImage
-                  ? { transformOrigin: "right center" }
-                  : enlargedLeftImage
-                    ? { transformOrigin: "left center" }
-                    : {}),
+                ...(imageOnLeft
+                  ? { transformOrigin: "left center" }
+                  : { transformOrigin: "right center" }),
                 transform: [
                   imageRotation ? `rotate(${imageRotation}deg)` : null,
-                  largeImage ? "scale(1.3)" : null,
-                  alignImageRight ? "scale(1.22)" : null,
-                  raisedPriceLayout ? "scale(1.12)" : null,
-                  enlargedLeftImage
-                    ? "translateY(-1rem) scale(1.08)"
-                    : null,
+                  coverScale ? `scale(${coverScale})` : null,
+                  alignImageRight ? "scale(1.1)" : null,
+                  enlargedLeftImage ? "translateY(-0.5rem) scale(1.05)" : null,
                 ]
                   .filter(Boolean)
                   .join(" "),
               }
             : undefined
         }
-        sizes="(max-width: 768px) 48vw, 280px"
+        sizes="(max-width: 1024px) 80vw, 280px"
       />
     </div>
   ) : null;
 
   return (
     <article
+      ref={cardRef}
       className={cn(
         "relative flex h-52 flex-col overflow-hidden border border-ink/8 bg-[#EFEEEB] shadow-sm sm:h-60",
         imageOnLeft ? "py-5 pr-5 pl-0" : "p-5",
@@ -128,7 +182,7 @@ export function AdvertisingPriceCard({ item }: AdvertisingPriceCardProps) {
           <button
             type="button"
             className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/30 text-xs font-medium text-ink/45 transition-colors hover:border-ink/50 hover:bg-ink/5 hover:text-ink/65"
-            aria-label={`More info about ${item.name}`}
+            aria-label={`${moreInfoAria} ${item.name}`}
           >
             i
           </button>
@@ -136,37 +190,22 @@ export function AdvertisingPriceCard({ item }: AdvertisingPriceCardProps) {
             role="tooltip"
             className="pointer-events-none absolute right-0 top-full z-30 mt-2 w-max max-w-[14rem] border border-ink/15 bg-white px-3 py-2 text-xs leading-snug text-ink opacity-0 shadow-md transition-opacity group-hover/info:opacity-100 group-focus-within/info:opacity-100"
           >
-            {infoText.startsWith("Size:") || infoText.startsWith("size:")
+            {infoText.startsWith(sizePrefix) ||
+            infoText.toLowerCase().startsWith("size:")
               ? infoText
-              : `Size: ${infoText}`}
+              : `${sizePrefix} ${infoText}`}
           </div>
         </div>
       ) : null}
 
-      <div
-        className={cn(
-          "flex h-full min-h-0",
-          alignImageRight ? "gap-0" : "gap-3 sm:gap-4",
-        )}
-      >
+      <div className="flex h-full min-h-0" style={{ gap: GAP_PX }}>
         {imageOnLeft ? imageBlock : null}
 
         <div
-          className={cn(
-            "flex min-w-0 flex-1 flex-col",
-            (alignImageRight || raisedPriceLayout || largeImage) &&
-              "relative z-10",
-            alignImageRight && "pr-8",
-            enlargedLeftImage && "-ml-6 sm:-ml-10",
-            largeImage && "translate-x-6 sm:translate-x-10",
-          )}
+          className="flex min-w-0 flex-1 flex-col"
+          style={{ paddingLeft: indentPx }}
         >
-          <h3
-            className={cn(
-              "mt-1 font-display text-[1.4rem] tracking-tight text-ink capitalize sm:mt-1.5 sm:text-[1.55rem]",
-              largeImage && "whitespace-nowrap",
-            )}
-          >
+          <h3 className="mt-1 font-display text-[1.4rem] leading-tight tracking-tight text-ink capitalize sm:mt-1.5 sm:text-[1.55rem]">
             {item.name}
           </h3>
 
@@ -210,12 +249,7 @@ export function AdvertisingPriceCard({ item }: AdvertisingPriceCardProps) {
                   : formatPrice(item.price)}
                 {item.priceSuffix ? (
                   item.priceSuffix.startsWith("+") && !raisedPriceLayout ? (
-                    <span
-                      className={cn(
-                        "mt-0.5 block text-sm font-normal leading-snug text-forest/75 sm:text-base",
-                        largeImage && "whitespace-nowrap",
-                      )}
-                    >
+                    <span className="mt-0.5 block text-sm font-normal leading-snug text-forest/75 sm:text-base">
                       {formatPriceSuffix(item.priceSuffix)}
                     </span>
                   ) : (

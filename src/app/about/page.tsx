@@ -88,7 +88,7 @@ export default function AboutPage() {
             subtitle="We combine media planning discipline with a product students use daily. That is the FreeNotes difference."
           />
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <Button href="/countries/estonia" size="lg">
+            <Button href="https://vihku.ee" size="lg">
               Explore Estonia
             </Button>
             <Button href="/contact" variant="outline" size="lg">

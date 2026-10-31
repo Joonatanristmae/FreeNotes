@@ -3,7 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { getRegionByPathname } from "@/data/regions";
+import {
+  getNavLinksByPathname,
+  getRegionByPathname,
+} from "@/data/regions";
 import { navLinks, siteConfig } from "@/data/site";
 import { RegionSelector } from "@/components/layout/RegionSelector";
 import { Button } from "@/components/ui/Button";
@@ -40,11 +43,16 @@ function NavItem({
 export function Navbar() {
   const pathname = usePathname();
   const region = getRegionByPathname(pathname);
-  const contactHref = region.contactHref;
-  const regionNavLinks = region.navLinks ?? null;
+  const contactHref =
+    pathname === "/lt-en" || pathname.startsWith("/lt-en/")
+      ? "/lt-en#contact"
+      : region.contactHref;
+  const regionNavLinks = getNavLinksByPathname(pathname);
   const links = regionNavLinks ?? navLinks;
   const showContactButton = !regionNavLinks;
-  const logoHref = regionNavLinks ? `${region.href}#top` : "/#top";
+  const logoHref = regionNavLinks
+    ? `${pathname.startsWith("/lt-en") ? "/lt-en" : region.href}#top`
+    : "/international#top";
   const [open, setOpen] = useState(false);
 
   return (

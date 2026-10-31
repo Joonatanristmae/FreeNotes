@@ -7,6 +7,7 @@ export const countries: Country[] = [
     flag: "🇪🇪",
     active: true,
     hasInventory: true,
+    path: "https://vihku.ee",
     hero: {
       title: "FreeNotes Estonia",
       subtitle:

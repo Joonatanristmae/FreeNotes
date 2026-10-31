@@ -130,26 +130,34 @@ function RegionOptionItem({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const className = cn(
+    "flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors",
+    selected
+      ? "bg-forest/8 font-semibold text-ink"
+      : "text-ink hover:bg-sand/70",
+  );
+  const children = (
+    <>
+      <span aria-hidden className="text-base leading-none">
+        {region.flag}
+      </span>
+      <span>{region.name}</span>
+      {selected ? <span className="sr-only">(current)</span> : null}
+    </>
+  );
+  const isExternal = /^https?:\/\//i.test(region.href);
+
   return (
     <li role="option" aria-selected={selected}>
-      <Link
-        href={region.href}
-        className={cn(
-          "flex items-center gap-3 px-3.5 py-2.5 text-sm transition-colors",
-          selected
-            ? "bg-forest/8 font-semibold text-ink"
-            : "text-ink hover:bg-sand/70",
-        )}
-        onClick={onSelect}
-      >
-        <span aria-hidden className="text-base leading-none">
-          {region.flag}
-        </span>
-        <span>{region.name}</span>
-        {selected ? (
-          <span className="sr-only">(current)</span>
-        ) : null}
-      </Link>
+      {isExternal ? (
+        <a href={region.href} className={className} onClick={onSelect}>
+          {children}
+        </a>
+      ) : (
+        <Link href={region.href} className={className} onClick={onSelect}>
+          {children}
+        </Link>
+      )}
     </li>
   );
 }

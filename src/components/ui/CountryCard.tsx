@@ -41,6 +41,14 @@ export function CountryCard({ country, className }: CountryCardProps) {
   );
 
   if (href) {
+    const isExternal = /^https?:\/\//i.test(href);
+    if (isExternal) {
+      return (
+        <a href={href} className="block h-full">
+          {content}
+        </a>
+      );
+    }
     return (
       <Link href={href} className="block h-full">
         {content}

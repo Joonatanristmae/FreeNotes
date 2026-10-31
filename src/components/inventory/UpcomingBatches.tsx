@@ -1,24 +1,56 @@
 "use client";
 
 import { useId, useState } from "react";
-import type { BookingStatus, NotebookBatch } from "@/data/types";
+import type { BookingStatus, NotebookBatch, PlacementStatus } from "@/data/types";
 import { BatchAvailabilityGrid } from "@/components/inventory/BatchAvailabilityGrid";
 import { cn } from "@/lib/utils";
 
-const statusLabel: Record<BookingStatus, string> = {
-  "booking-open": "Booking open",
-  "coming-soon": "Coming soon",
-  closed: "Closed",
+export type UpcomingBatchesCopy = {
+  title: string;
+  subtitle: string;
+  notebooksLabel: string;
+  distribution: string;
+  designDeadline: string;
+  distributionStart: string;
+  availableOf: (available: number, total: number) => string;
+  availabilityHeading: string;
+  bookingStatus: Record<BookingStatus, string>;
+  placementStatus: Record<PlacementStatus, string>;
+};
+
+const defaultCopy: UpcomingBatchesCopy = {
+  title: "Upcoming batches",
+  subtitle:
+    "Each batch shows how many notebooks will print, when advertising must be booked, and where they distribute. Expand a batch to see cover and page availability.",
+  notebooksLabel: "notebooks",
+  distribution: "Distribution",
+  designDeadline: "Design deadline",
+  distributionStart: "Distribution start date",
+  availableOf: (available, total) =>
+    `${available} of ${total} placements available`,
+  availabilityHeading: "Advertising availability",
+  bookingStatus: {
+    "booking-open": "Booking open",
+    "coming-soon": "Coming soon",
+    closed: "Closed",
+  },
+  placementStatus: {
+    available: "Available",
+    reserved: "Reserved",
+    sold: "Sold",
+  },
 };
 
 type UpcomingBatchesProps = {
   batches: NotebookBatch[];
   onReservePlacement: (batch: NotebookBatch, placementId: string) => void;
+  copy?: UpcomingBatchesCopy;
 };
 
 export function UpcomingBatches({
   batches,
   onReservePlacement,
+  copy = defaultCopy,
 }: UpcomingBatchesProps) {
   const [openBatchId, setOpenBatchId] = useState<string | null>(null);
 
@@ -30,12 +62,10 @@ export function UpcomingBatches({
       <div className="mx-auto max-w-6xl">
         <div className="max-w-3xl">
           <h2 className="font-display text-3xl leading-tight tracking-tight text-ink sm:text-4xl lg:text-5xl">
-            Upcoming batches
+            {copy.title}
           </h2>
           <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-            Each batch shows how many notebooks will print, when advertising
-            must be booked, and where they distribute. Expand a batch to see
-            cover and page availability.
+            {copy.subtitle}
           </p>
         </div>
 
@@ -52,6 +82,7 @@ export function UpcomingBatches({
                 batch={batch}
                 availableCount={availableCount}
                 isOpen={isOpen}
+                copy={copy}
                 onToggle={() =>
                   setOpenBatchId((current) =>
                     current === batch.id ? null : batch.id,
@@ -71,12 +102,14 @@ function BatchAccordion({
   batch,
   availableCount,
   isOpen,
+  copy,
   onToggle,
   onReservePlacement,
 }: {
   batch: NotebookBatch;
   availableCount: number;
   isOpen: boolean;
+  copy: UpcomingBatchesCopy;
   onToggle: () => void;
   onReservePlacement: (batch: NotebookBatch, placementId: string) => void;
 }) {
@@ -135,37 +168,41 @@ function BatchAccordion({
                       "bg-rose-50 text-rose-700",
                   )}
                 >
-                  {statusLabel[batch.bookingStatus]}
+                  {copy.bookingStatus[batch.bookingStatus]}
                 </span>
               </div>
               <p className="mt-3 text-2xl font-semibold tracking-tight text-forest">
                 {batch.notebookCount.toLocaleString("en-US")}
                 <span className="ml-2 text-sm font-medium text-muted">
-                  notebooks
+                  {copy.notebooksLabel}
                 </span>
               </p>
               <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-3">
                 <div>
-                  <dt className="text-muted">City</dt>
-                  <dd className="mt-0.5 font-medium text-ink">{batch.city}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted">Print deadline</dt>
-                  <dd className="mt-0.5 font-medium text-ink">
-                    {batch.printDeadlineLabel}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-muted">Distribution</dt>
+                  <dt className="text-muted">{copy.distribution}</dt>
                   <dd className="mt-0.5 font-medium text-ink">
                     {batch.distributionLabel}
                   </dd>
                 </div>
+                <div>
+                  <dt className="text-muted">{copy.designDeadline}</dt>
+                  <dd className="mt-0.5 font-medium text-ink">
+                    {batch.designDeadlineLabel ?? batch.printDeadlineLabel}
+                  </dd>
+                </div>
+                {batch.distributionStartLabel ? (
+                  <div>
+                    <dt className="text-muted">{copy.distributionStart}</dt>
+                    <dd className="mt-0.5 font-medium text-ink">
+                      {batch.distributionStartLabel}
+                    </dd>
+                  </div>
+                ) : null}
               </dl>
             </div>
 
             <p className="shrink-0 text-sm text-muted sm:pt-1 sm:text-right">
-              {availableCount} of {batch.placements.length} placements available
+              {copy.availableOf(availableCount, batch.placements.length)}
             </p>
           </div>
         </button>
@@ -181,10 +218,11 @@ function BatchAccordion({
         {isOpen ? (
           <>
             <h4 className="mb-4 text-sm font-semibold uppercase tracking-[0.14em] text-forest-muted">
-              Advertising availability
+              {copy.availabilityHeading}
             </h4>
             <BatchAvailabilityGrid
               placements={batch.placements}
+              statusLabels={copy.placementStatus}
               onSelectAvailable={(placement) =>
                 onReservePlacement(batch, placement.id)
               }

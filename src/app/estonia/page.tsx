@@ -1,12 +1,5 @@
-import type { Metadata } from "next";
-import { CountryAdvertisingInventory } from "@/components/inventory/CountryAdvertisingInventory";
-import { estoniaInventory } from "@/data/countries/estonia";
-
-export const metadata: Metadata = {
-  title: "FreeNotes Estonia — Advertising",
-  description: estoniaInventory.hero.subtitle,
-};
+import { redirect } from "next/navigation";
 
 export default function EstoniaPage() {
-  return <CountryAdvertisingInventory inventory={estoniaInventory} />;
+  redirect("https://vihku.ee");
 }

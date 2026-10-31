@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { howItWorks } from "@/data/site";
+import { howItWorks as defaultSteps } from "@/data/site";
 
 const icons = [
   <svg key="1" viewBox="0 0 24 24" fill="none" className="h-6 w-6" aria-hidden>
@@ -17,14 +17,33 @@ const icons = [
   </svg>,
 ];
 
-export function HowItWorks() {
+type HowItWorksStep = {
+  id: string;
+  step: string;
+  title: string;
+  description: string;
+};
+
+type HowItWorksProps = {
+  eyebrow?: string;
+  title?: string;
+  steps?: HowItWorksStep[];
+  imageAlt?: string;
+};
+
+export function HowItWorks({
+  eyebrow = "Process",
+  title = "How it works",
+  steps = defaultSteps,
+  imageAlt = "FreeNotes notebooks",
+}: HowItWorksProps) {
   return (
     <section className="bg-paper px-6 py-20 sm:py-24">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center lg:gap-12">
         <div className="relative mx-auto aspect-square w-full max-w-[18rem] shrink-0 sm:max-w-[20rem] lg:mx-0 lg:w-[20rem] lg:max-w-none">
           <Image
             src="/cropped_circle_image.png"
-            alt="FreeNotes notebooks"
+            alt={imageAlt}
             fill
             unoptimized
             className="object-contain drop-shadow-lg"
@@ -35,15 +54,15 @@ export function HowItWorks() {
         <div className="min-w-0 flex-1">
           <div className="max-w-xl -translate-x-3 sm:-translate-x-5 lg:-translate-x-6">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-forest-muted">
-              Process
+              {eyebrow}
             </p>
             <h2 className="font-display text-3xl tracking-tight text-ink sm:text-4xl">
-              How it works
+              {title}
             </h2>
           </div>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3 sm:gap-5">
-            {howItWorks.map((step, index) => (
+            {steps.map((step, index) => (
               <article
                 key={step.id}
                 className="relative border border-ink/8 bg-white p-5 transition-colors duration-200 hover:border-forest/25 sm:p-6"

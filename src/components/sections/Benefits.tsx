@@ -1,12 +1,20 @@
 import { SectionTitle } from "@/components/ui/SectionTitle";
-import { benefits } from "@/data/site";
+import { benefits as defaultBenefits } from "@/data/site";
+
+type BenefitItem = {
+  id: string;
+  title: string;
+  description: string;
+};
 
 type BenefitsProps = {
   title?: string;
+  items?: BenefitItem[];
 };
 
 export function Benefits({
   title = "Why advertise with FreeNotes",
+  items = defaultBenefits,
 }: BenefitsProps) {
   return (
     <section className="border-y border-ink/8 bg-sand/50 px-6 py-20 sm:py-24">
@@ -14,7 +22,7 @@ export function Benefits({
         <SectionTitle title={title} />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {benefits.map((benefit, index) => (
+          {items.map((benefit, index) => (
             <article
               key={benefit.id}
               className="border-t-2 border-forest bg-paper p-6"

@@ -6,12 +6,18 @@ type AdvertisingPricesProps = {
   prices: AdvertisingPrice[];
   title?: string;
   subtitle?: string;
+  placeholderNote?: string;
+  sizePrefix?: string;
+  moreInfoAria?: string;
 };
 
 export function AdvertisingPrices({
   prices,
   title = "Advertising prices",
   subtitle = "Advertising funds the production and free distribution of the notebooks.",
+  placeholderNote = "Prices marked as placeholder are illustrative — replace with confirmed rates in country data.",
+  sizePrefix = "Size:",
+  moreInfoAria = "More info about",
 }: AdvertisingPricesProps) {
   const hasPlaceholders = prices.some((price) => price.isPlaceholder);
 
@@ -24,15 +30,17 @@ export function AdvertisingPrices({
         <SectionTitle title={title} subtitle={subtitle} />
 
         {hasPlaceholders ? (
-          <p className="mt-4 text-sm text-muted">
-            Prices marked as placeholder are illustrative — replace with confirmed
-            rates in country data.
-          </p>
+          <p className="mt-4 text-sm text-muted">{placeholderNote}</p>
         ) : null}
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <div className="mt-8 grid gap-4 md:grid-cols-2">
           {prices.map((item) => (
-            <AdvertisingPriceCard key={item.id} item={item} />
+            <AdvertisingPriceCard
+              key={item.id}
+              item={item}
+              sizePrefix={sizePrefix}
+              moreInfoAria={moreInfoAria}
+            />
           ))}
         </div>
       </div>

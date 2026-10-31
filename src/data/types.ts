@@ -37,7 +37,7 @@ export type Country = {
   active: boolean;
   /** When true, country card links to the inventory/market page */
   hasInventory?: boolean;
-  /** Public URL for the country page (e.g. "/lt"). Defaults to `/{slug}` when hasInventory. */
+  /** Public URL for the country page (e.g. "/lt" or "https://vihku.ee"). Defaults to `/{slug}` when hasInventory. */
   path?: string;
   hero: {
     title: string;
@@ -125,6 +125,10 @@ export type NotebookBatch = {
   printDeadline: string;
   /** Human-readable print deadline, e.g. "15 September 2027" */
   printDeadlineLabel: string;
+  /** Artwork / design deadline shown in the UI when set. */
+  designDeadlineLabel?: string;
+  /** When distribution starts, e.g. "September 2027". */
+  distributionStartLabel?: string;
   /** Where notebooks will be distributed */
   distributionLabel: string;
   targetDescription: string;
@@ -146,6 +150,10 @@ export type CountryTeamMember = {
   role?: string;
   /** Path under /public, or null while waiting for a photo. */
   photo: string | null;
+  /** CSS object-position when photo needs a non-default crop (e.g. "50% 70%"). */
+  photoObjectPosition?: string;
+  /** Extra zoom on the photo crop (1 = none). */
+  photoScale?: number;
   isPlaceholder?: boolean;
 };
 

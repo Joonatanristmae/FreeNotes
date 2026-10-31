@@ -7,7 +7,7 @@ import type { NavLink } from "./types";
  * Hrefs follow existing project routes:
  * - inventory markets → /{slug}
  * - marketing markets → /countries/{slug}
- * - international → /
+ * - international → /international (cookie-free; `/` geo-redirects LT → /lt)
  */
 export type RegionOption = {
   code: string;
@@ -27,8 +27,8 @@ export const regionOptions: RegionOption[] = [
     code: "ee",
     name: "Estonia",
     flag: "🇪🇪",
-    href: "/estonia",
-    contactHref: "/#become-a-partner",
+    href: "https://vihku.ee",
+    contactHref: "https://vihku.ee/#become-a-partner",
     matchPaths: ["/estonia", "/countries/estonia"],
   },
   {
@@ -42,14 +42,14 @@ export const regionOptions: RegionOption[] = [
       { label: "Upcoming batches", href: "/lt#upcoming-batches" },
       { label: "Contact us", href: "/lt#contact" },
     ],
-    matchPaths: ["/lt", "/lithuania", "/countries/lithuania"],
+    matchPaths: ["/lt", "/lt-en", "/lithuania", "/countries/lithuania"],
   },
   {
     code: "fi",
     name: "Finland",
     flag: "🇫🇮",
     href: "/countries/finland",
-    contactHref: "/#become-a-partner",
+    contactHref: "/international#become-a-partner",
     matchPaths: ["/countries/finland"],
   },
   {
@@ -57,16 +57,16 @@ export const regionOptions: RegionOption[] = [
     name: "United Kingdom",
     flag: "🇬🇧",
     href: "/countries/united-kingdom",
-    contactHref: "/#become-a-partner",
+    contactHref: "/international#become-a-partner",
     matchPaths: ["/countries/united-kingdom"],
   },
   {
     code: "international",
     name: "International",
     flag: "🌍",
-    href: "/",
-    contactHref: "/#become-a-partner",
-    matchPaths: ["/"],
+    href: "/international",
+    contactHref: "/international#become-a-partner",
+    matchPaths: ["/", "/international"],
   },
 ];
 
@@ -96,5 +96,42 @@ export function getContactHrefByPathname(pathname: string): string {
 }
 
 export function getNavLinksByPathname(pathname: string): NavLink[] | null {
-  return getRegionByPathname(pathname).navLinks ?? null;
+  const region = getRegionByPathname(pathname);
+  if (!region.navLinks) return null;
+
+  // Keep in-page links on the current Lithuania locale route (/lt vs /lt-en).
+  const normalized =
+    pathname.length > 1 && pathname.endsWith("/")
+      ? pathname.slice(0, -1)
+      : pathname;
+  const lithuaniaBase =
+    normalized === "/lt-en" || normalized.startsWith("/lt-en/")
+      ? "/lt-en"
+      : normalized === "/lt" || normalized.startsWith("/lt/")
+        ? "/lt"
+        : null;
+
+  if (region.code !== "lt" || !lithuaniaBase) {
+    return region.navLinks;
+  }
+
+  const ltLabels: Record<string, string> = {
+    Pricing: "Kainoraštis",
+    "Upcoming batches": "Artėjančios laidos",
+    "Contact us": "Susisiekti",
+  };
+
+  return region.navLinks.map((link) => {
+    const hashIndex = link.href.indexOf("#");
+    const href =
+      hashIndex === -1
+        ? link.href
+        : `${lithuaniaBase}${link.href.slice(hashIndex)}`;
+    return {
+      ...link,
+      href,
+      label:
+        lithuaniaBase === "/lt" ? (ltLabels[link.label] ?? link.label) : link.label,
+    };
+  });
 }

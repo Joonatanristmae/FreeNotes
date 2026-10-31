@@ -1,6 +1,5 @@
 import type { CountryInventory } from "@/data/types";
 import { autumn2027 } from "./batch-autumn-2027";
-import { spring2028 } from "./batch-spring-2028";
 
 /**
  * Lithuania country advertising page data.
@@ -98,7 +97,7 @@ export const lithuaniaInventory: CountryInventory = {
     },
     {
       id: "vaheleht",
-      name: "Middle page",
+      name: "Middle full page",
       description:
         "Full A4 page in the middle of the notebook. (2 per notebook in total)",
       size: "A4 spread (420 × 297 mm)",
@@ -131,26 +130,23 @@ export const lithuaniaInventory: CountryInventory = {
       isPlaceholder: true,
     },
   ],
-  batches: [autumn2027, spring2028],
+  batches: [autumn2027],
   // No Lithuanian clients yet — section stays hidden until you add entries.
   previousPartners: [],
   teamContacts: [
     {
       id: "kazimieras",
       name: "Kazimieras Jasaitis",
-      role: "FreeNotes Lithuania",
       photo: "/kazimieras.jpg",
     },
     {
       id: "joonatan",
       name: "Joonatan Ristmäe",
-      role: "FreeNotes Lithuania",
-      photo: "/meie fotod/joonatan.webp",
+      photo: "/meie fotod/joonatan.jpg",
     },
     {
       id: "auguste",
       name: "Augustė Jasaitytė",
-      role: "FreeNotes Lithuania",
       photo: null,
     },
   ],

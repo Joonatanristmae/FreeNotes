@@ -1,19 +1,5 @@
-import { Benefits } from "@/components/sections/Benefits";
-import { CountriesPreview } from "@/components/sections/CountriesPreview";
-import { Hero } from "@/components/sections/Hero";
-import { HowItWorks } from "@/components/sections/HowItWorks";
-import { PartnersPreview } from "@/components/sections/PartnersPreview";
-import { ContactCTA } from "@/components/blocks/ContactCTA";
+import { InternationalLanding } from "@/components/pages/InternationalLanding";
 
 export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <HowItWorks />
-      <Benefits />
-      <CountriesPreview />
-      <PartnersPreview />
-      <ContactCTA />
-    </>
-  );
+  return <InternationalLanding />;
 }
