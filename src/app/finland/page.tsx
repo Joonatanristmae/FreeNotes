@@ -1,0 +1,6 @@
+import { redirect } from "next/navigation";
+
+/** Old path — keep working by sending visitors to /fi. */
+export default function FinlandRedirectPage() {
+  redirect("/fi");
+}

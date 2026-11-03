@@ -175,10 +175,13 @@ export const countries: Country[] = [
     slug: "finland",
     name: "Finland",
     flag: "🇫🇮",
-    active: false,
+    active: true,
+    hasInventory: true,
+    path: "/fi",
     hero: {
       title: "FreeNotes Finland",
-      subtitle: "Coming soon — Nordic expansion in planning.",
+      subtitle:
+        "Free notebooks for Finnish students, funded by advertising.",
     },
     stats: [],
     universities: [],

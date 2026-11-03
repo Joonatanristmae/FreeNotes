@@ -48,9 +48,14 @@ export const regionOptions: RegionOption[] = [
     code: "fi",
     name: "Finland",
     flag: "🇫🇮",
-    href: "/countries/finland",
-    contactHref: "/international#become-a-partner",
-    matchPaths: ["/countries/finland"],
+    href: "/fi",
+    contactHref: "/fi#contact",
+    navLinks: [
+      { label: "Pricing", href: "/fi#advertising-prices" },
+      { label: "Upcoming batches", href: "/fi#upcoming-batches" },
+      { label: "Contact us", href: "/fi#contact" },
+    ],
+    matchPaths: ["/fi", "/fi-en", "/finland", "/countries/finland"],
   },
   {
     code: "uk",
@@ -95,43 +100,67 @@ export function getContactHrefByPathname(pathname: string): string {
   return getRegionByPathname(pathname).contactHref;
 }
 
-export function getNavLinksByPathname(pathname: string): NavLink[] | null {
-  const region = getRegionByPathname(pathname);
-  if (!region.navLinks) return null;
-
-  // Keep in-page links on the current Lithuania locale route (/lt vs /lt-en).
+function localeBaseForRegion(
+  regionCode: string,
+  pathname: string,
+): string | null {
   const normalized =
     pathname.length > 1 && pathname.endsWith("/")
       ? pathname.slice(0, -1)
       : pathname;
-  const lithuaniaBase =
-    normalized === "/lt-en" || normalized.startsWith("/lt-en/")
-      ? "/lt-en"
-      : normalized === "/lt" || normalized.startsWith("/lt/")
-        ? "/lt"
-        : null;
 
-  if (region.code !== "lt" || !lithuaniaBase) {
+  if (regionCode === "lt") {
+    if (normalized === "/lt-en" || normalized.startsWith("/lt-en/")) return "/lt-en";
+    if (normalized === "/lt" || normalized.startsWith("/lt/")) return "/lt";
+    return null;
+  }
+
+  if (regionCode === "fi") {
+    if (normalized === "/fi-en" || normalized.startsWith("/fi-en/")) return "/fi-en";
+    if (normalized === "/fi" || normalized.startsWith("/fi/")) return "/fi";
+    return null;
+  }
+
+  return null;
+}
+
+export function getNavLinksByPathname(pathname: string): NavLink[] | null {
+  const region = getRegionByPathname(pathname);
+  if (!region.navLinks) return null;
+
+  const localeBase = localeBaseForRegion(region.code, pathname);
+  if (!localeBase) {
     return region.navLinks;
   }
 
-  const ltLabels: Record<string, string> = {
-    Pricing: "Kainoraštis",
-    "Upcoming batches": "Artėjančios laidos",
-    "Contact us": "Susisiekti",
+  const nativeLabels: Record<string, Record<string, string>> = {
+    lt: {
+      Pricing: "Kainoraštis",
+      "Upcoming batches": "Artėjančios laidos",
+      "Contact us": "Susisiekti",
+    },
+    fi: {
+      Pricing: "Hinnasto",
+      "Upcoming batches": "Tulevat erät",
+      "Contact us": "Ota yhteyttä",
+    },
   };
+
+  const isNative =
+    (region.code === "lt" && localeBase === "/lt") ||
+    (region.code === "fi" && localeBase === "/fi");
+  const labels = nativeLabels[region.code] ?? {};
 
   return region.navLinks.map((link) => {
     const hashIndex = link.href.indexOf("#");
     const href =
       hashIndex === -1
         ? link.href
-        : `${lithuaniaBase}${link.href.slice(hashIndex)}`;
+        : `${localeBase}${link.href.slice(hashIndex)}`;
     return {
       ...link,
       href,
-      label:
-        lithuaniaBase === "/lt" ? (ltLabels[link.label] ?? link.label) : link.label,
+      label: isNative ? (labels[link.label] ?? link.label) : link.label,
     };
   });
 }

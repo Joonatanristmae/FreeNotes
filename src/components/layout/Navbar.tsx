@@ -40,7 +40,7 @@ function NavItem({
   );
 }
 
-function LithuaniaLangSwitch({
+function MarketLangSwitch({
   pathname,
   className,
   onNavigate,
@@ -49,9 +49,19 @@ function LithuaniaLangSwitch({
   className?: string;
   onNavigate?: () => void;
 }) {
-  const isEn = pathname === "/lt-en" || pathname.startsWith("/lt-en/");
+  const isLtEn = pathname === "/lt-en" || pathname.startsWith("/lt-en/");
   const isLt = pathname === "/lt" || pathname.startsWith("/lt/");
-  if (!isEn && !isLt) return null;
+  const isFiEn = pathname === "/fi-en" || pathname.startsWith("/fi-en/");
+  const isFi = pathname === "/fi" || pathname.startsWith("/fi/");
+
+  const market = isLt || isLtEn ? "lt" : isFi || isFiEn ? "fi" : null;
+  if (!market) return null;
+
+  const nativeHref = market === "lt" ? "/lt" : "/fi";
+  const enHref = market === "lt" ? "/lt-en" : "/fi-en";
+  const nativeLabel = market === "lt" ? "LT" : "FI";
+  const isNative = market === "lt" ? isLt : isFi;
+  const isEn = market === "lt" ? isLtEn : isFiEn;
 
   const optionClass = (active: boolean) =>
     cn(
@@ -69,16 +79,16 @@ function LithuaniaLangSwitch({
       aria-label="Language"
     >
       <Link
-        href="/lt"
-        hrefLang="lt"
-        className={optionClass(isLt)}
-        aria-current={isLt ? "page" : undefined}
+        href={nativeHref}
+        hrefLang={market}
+        className={optionClass(isNative)}
+        aria-current={isNative ? "page" : undefined}
         onClick={onNavigate}
       >
-        LT
+        {nativeLabel}
       </Link>
       <Link
-        href="/lt-en"
+        href={enHref}
         hrefLang="en"
         className={optionClass(isEn)}
         aria-current={isEn ? "page" : undefined}
@@ -90,18 +100,26 @@ function LithuaniaLangSwitch({
   );
 }
 
+function marketLocaleHome(pathname: string, regionHref: string): string {
+  if (pathname.startsWith("/lt-en")) return "/lt-en";
+  if (pathname.startsWith("/fi-en")) return "/fi-en";
+  return regionHref;
+}
+
 export function Navbar() {
   const pathname = usePathname();
   const region = getRegionByPathname(pathname);
   const contactHref =
     pathname === "/lt-en" || pathname.startsWith("/lt-en/")
       ? "/lt-en#contact"
-      : region.contactHref;
+      : pathname === "/fi-en" || pathname.startsWith("/fi-en/")
+        ? "/fi-en#contact"
+        : region.contactHref;
   const regionNavLinks = getNavLinksByPathname(pathname);
   const links = regionNavLinks ?? navLinks;
   const showContactButton = !regionNavLinks;
   const logoHref = regionNavLinks
-    ? `${pathname.startsWith("/lt-en") ? "/lt-en" : region.href}#top`
+    ? `${marketLocaleHome(pathname, region.href)}#top`
     : "/international#top";
   const [open, setOpen] = useState(false);
 
@@ -128,7 +146,7 @@ export function Navbar() {
               {link.label}
             </NavItem>
           ))}
-          <LithuaniaLangSwitch pathname={pathname} />
+          <MarketLangSwitch pathname={pathname} />
           <RegionSelector prominent={Boolean(regionNavLinks)} />
           {showContactButton ? (
             <Button href={contactHref} size="sm">
@@ -138,7 +156,7 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2 md:hidden">
-          <LithuaniaLangSwitch pathname={pathname} />
+          <MarketLangSwitch pathname={pathname} />
           <RegionSelector
             prominent={Boolean(regionNavLinks)}
             onNavigate={() => setOpen(false)}

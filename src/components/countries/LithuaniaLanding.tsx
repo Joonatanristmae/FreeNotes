@@ -70,7 +70,7 @@ export function LithuaniaLanding({ locale }: LithuaniaLandingProps) {
         moreInfoAria={copy.prices.moreInfoAria}
       />
 
-      <CountryBatchesSection inventory={inventory} locale={locale} />
+      <CountryBatchesSection inventory={inventory} market="lt" locale={locale} />
 
       <CountryTeamContact
         countryName={inventory.name}

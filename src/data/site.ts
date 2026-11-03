@@ -7,7 +7,7 @@ export const siteConfig = {
   description:
     "FreeNotes helps companies reach students through free notebooks distributed in schools and universities.",
   email: "info@freenotes.eu",
-  location: "Estonia",
+  location: "Vihku OÜ, Estonia",
   url: "https://freenotes.eu",
 };
 

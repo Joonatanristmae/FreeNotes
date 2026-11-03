@@ -8,19 +8,30 @@ import {
   getLithuaniaPageCopy,
   type LithuaniaLocale,
 } from "@/data/countries/lithuania/i18n";
+import {
+  getFinlandPageCopy,
+  type FinlandLocale,
+} from "@/data/countries/finland/i18n";
 
 type CountryBatchesSectionProps = {
   inventory: CountryInventory;
-  /** When set, loads Lithuania locale strings on the client (avoids passing functions as props). */
-  locale?: LithuaniaLocale;
+  /** Loads locale strings on the client (avoids passing functions as props). */
+  market?: "lt" | "fi";
+  locale?: LithuaniaLocale | FinlandLocale;
 };
 
 export function CountryBatchesSection({
   inventory,
+  market,
   locale,
 }: CountryBatchesSectionProps) {
   const contactHref = `mailto:${siteConfig.email}`;
-  const pageCopy = locale ? getLithuaniaPageCopy(locale) : null;
+  const pageCopy =
+    market === "lt" && (locale === "lt" || locale === "en")
+      ? getLithuaniaPageCopy(locale)
+      : market === "fi" && (locale === "fi" || locale === "en")
+        ? getFinlandPageCopy(locale)
+        : null;
 
   const handleReservePlacement = useCallback(
     (batch: NotebookBatch, placementId: string) => {
