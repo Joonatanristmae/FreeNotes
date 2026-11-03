@@ -7,7 +7,7 @@ import type { NavLink } from "./types";
  * Hrefs follow existing project routes:
  * - inventory markets → /{slug}
  * - marketing markets → /countries/{slug}
- * - international → /international (cookie-free; `/` geo-redirects LT → /lt)
+ * - international → /international (cookie-free; `/` geo-redirects LT→/lt, FI→/fi)
  */
 export type RegionOption = {
   code: string;

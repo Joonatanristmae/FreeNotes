@@ -1,9 +1,10 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 /**
- * Cookie-free geo entry: Lithuanian visitors hitting freenotes.eu `/`
- * are sent to `/lt`. Choosing International goes to `/international`,
- * which is never geo-redirected.
+ * Cookie-free geo entry on freenotes.eu `/`:
+ * - Lithuania (LT) → /lt
+ * - Finland (FI) → /fi
+ * Choosing International goes to `/international`, which is never geo-redirected.
  */
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -21,9 +22,12 @@ export function proxy(request: NextRequest) {
   }
 
   const country = request.headers.get("x-vercel-ip-country");
-  if (country === "LT") {
+  const geoHome =
+    country === "LT" ? "/lt" : country === "FI" ? "/fi" : null;
+
+  if (geoHome) {
     const url = request.nextUrl.clone();
-    url.pathname = "/lt";
+    url.pathname = geoHome;
     return NextResponse.redirect(url);
   }
 
