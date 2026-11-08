@@ -324,7 +324,7 @@ const fi: FinlandPageCopy = {
         step: "02",
         title: "Valmistamme ja jaamme vihkot",
         description:
-          "Tuotamme vihkot ja toimitamme ne oppilaitoksiin, joista opiskelijat voivat noutaa ne ilmaiseksi.",
+          "Painatamme vihkot ja toimitamme ne oppilaitoksiin, mistä opiskelijat voivat noutaa ne ilmaiseksi.",
       },
       {
         id: "use",
@@ -351,13 +351,13 @@ const fi: FinlandPageCopy = {
         id: "regional",
         title: "Valitse alue tai kaupunki",
         description:
-          "Kohdista vihkot sinne, missä se sinulle merkitsee — ne menevät juuri sinne minne haluat.",
+          "Kohdista vihkot alueelle, joka on sinulle merkittävä — toimitamme ne juuri sinne minne haluat.",
       },
       {
         id: "flexible",
         title: "Joustava mittakaava ja budjetti",
         description:
-          "Muutamasta sivusta pienessä painoksessa noin 20 €:sta aina moniin sivuihin tuhansissa vihkoissa — jokaiselle budjetille löytyy sopiva vaihtoehto.",
+          "Lähtien muutamasta sivusta pienessä painoksessa parilla kympillä, aina moniin sivuihin ja tuhansiin vihkoihin — jokaiselle budjetille löytyy sopiva vaihtoehto.",
       },
     ],
   },
@@ -378,7 +378,7 @@ const fi: FinlandPageCopy = {
   prices: {
     title: "Hinnasto",
     subtitle:
-      "Mainonta rahoittaa vihkojen valmistuksen ja ilmaisen jakelun Suomessa.",
+      "Mainonnalla rahoitamme vihkojen valmistuksen ja ilmaisen jakelun Suomessa.",
     placeholderNote:
       "Tilapäisiksi merkityt hinnat ovat suuntaa-antavia — korvaa ne vahvistetuilla maan tiedoissa.",
     sizePrefix: "Koko:",

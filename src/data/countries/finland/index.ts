@@ -140,7 +140,7 @@ export const finlandInventory: CountryInventory = {
     },
     {
       id: "nikodemus",
-      name: "Nikodemus Tommiska",
+      name: "Niko Tommiska",
       photo: null,
     },
   ],
